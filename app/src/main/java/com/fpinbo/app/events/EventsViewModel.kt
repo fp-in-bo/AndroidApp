@@ -3,7 +3,7 @@ package com.fpinbo.app.events
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.runIO
+import androidx.lifecycle.unsafeRunAsyncInViewModel
 import arrow.fx.IO
 import arrow.fx.typeclasses.seconds
 import javax.inject.Inject
@@ -21,12 +21,14 @@ class EventsViewModel @Inject constructor() : ViewModel() {
 
     private fun loadData() {
         _state.value = Loading
-        runIO(
-            io = retrieveData(),
-            liveData = _state,
-            errorMapping = { Error(it.message.orEmpty()) },
-            successMapping = { Events(it.events) }
-        )
+        retrieveData()
+            .unsafeRunAsyncInViewModel(this) { result ->
+                val viewState = result.fold(
+                    ifLeft = { Error(it.message.orEmpty()) },
+                    ifRight = { Events(it.events) }
+                )
+                _state.postValue(viewState)
+            }
     }
 
     private fun retrieveData(): IO<Events> {
