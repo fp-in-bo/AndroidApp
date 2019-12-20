@@ -1,8 +1,7 @@
 package com.fpinbo.app.inject
 
-import com.fpinbo.app.events.EventsFragment
-import com.fpinbo.app.events.inject.EventsModule
 import dagger.Component
+import javax.inject.Provider
 import javax.inject.Singleton
 
 @Singleton
@@ -10,10 +9,11 @@ import javax.inject.Singleton
     modules = [
         AppModule::class,
         ViewModelBuilder::class,
-        EventsModule::class
+        FeatureBinderModule::class
     ]
 )
 interface AppComponent {
 
-    fun inject(eventsFragment: EventsFragment)
+    fun subComponentBuilders(): Map<Class<*>, Provider<SubComponentBuilder<*>>>
+
 }

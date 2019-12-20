@@ -1,4 +1,4 @@
-package com.fpinbo.app.events
+package com.fpinbo.app.events.view
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.fpinbo.app.R
+import com.fpinbo.app.events.Event
 
 class EventsAdapter(
     private val data: List<Event>

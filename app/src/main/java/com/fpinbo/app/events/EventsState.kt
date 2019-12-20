@@ -16,5 +16,6 @@ data class Error(
 data class Event(
     val title: String,
     val speaker: String,
-    val imageUrl: String
+    val imageUrl: String,
+    val description: String
 )

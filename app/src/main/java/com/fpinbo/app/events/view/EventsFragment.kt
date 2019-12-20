@@ -1,4 +1,4 @@
-package com.fpinbo.app.events
+package com.fpinbo.app.events.view
 
 import android.content.Context
 import android.os.Bundle
@@ -11,9 +11,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.transition.TransitionManager
-import com.fpinbo.app.FPInBoApplication
 import com.fpinbo.app.R
+import com.fpinbo.app.events.Error
+import com.fpinbo.app.events.Events
+import com.fpinbo.app.events.EventsViewModel
+import com.fpinbo.app.events.Loading
+import com.fpinbo.app.events.inject.EventsModule
+import com.fpinbo.app.events.inject.EventsSubComponent
 import com.fpinbo.app.utils.exhaustive
+import com.fpinbo.app.utils.subComponentBuilder
 import kotlinx.android.synthetic.main.events_fragment.*
 import javax.inject.Inject
 
@@ -29,7 +35,11 @@ class EventsFragment : Fragment() {
     private lateinit var viewModel: EventsViewModel
 
     override fun onAttach(context: Context) {
-        FPInBoApplication.getAppComponent(context).inject(this)
+        val eventsSubComponent =
+            context.subComponentBuilder<EventsSubComponent.Builder>()
+                .eventsModule(EventsModule())
+                .build()
+        eventsSubComponent.inject(this)
         super.onAttach(context)
     }
 

@@ -2,11 +2,10 @@ package com.fpinbo.app
 
 import android.app.Application
 import android.content.Context
-import com.fpinbo.app.inject.AppComponent
-import com.fpinbo.app.inject.AppModule
-import com.fpinbo.app.inject.DaggerAppComponent
+import com.fpinbo.app.inject.*
+import javax.inject.Provider
 
-class FPInBoApplication : Application() {
+class FPInBoApplication : Application(), HasSubComponentBuilders {
 
     companion object {
         fun getAppComponent(context: Context): AppComponent {
@@ -22,4 +21,7 @@ class FPInBoApplication : Application() {
         super.onCreate()
         appComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
     }
+
+    override fun subComponentBuilders(): Map<Class<*>, Provider<SubComponentBuilder<*>>> =
+        appComponent.subComponentBuilders()
 }

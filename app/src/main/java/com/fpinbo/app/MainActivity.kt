@@ -2,7 +2,7 @@ package com.fpinbo.app
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.fpinbo.app.events.EventsFragment
+import com.fpinbo.app.events.view.EventsFragment
 
 class MainActivity : AppCompatActivity() {
 
