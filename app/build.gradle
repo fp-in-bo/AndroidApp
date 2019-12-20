@@ -57,7 +57,7 @@ dependencies {
     implementation("io.coil-kt:coil:0.8.0")
 
     implementation "io.arrow-kt:arrow-core:0.10.4"
-    implementation "io.arrow-kt:arrow-syntax:0.10.3"
+    implementation "io.arrow-kt:arrow-syntax:0.10.4"
     implementation "io.arrow-kt:arrow-fx:0.10.4"
     kapt "io.arrow-kt:arrow-meta:0.10.4"
 
