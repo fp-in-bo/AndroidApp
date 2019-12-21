@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FPInBo</string>
+    <string name="title_events">Events</string>
+    <string name="title_account">Account</string>
 </resources>

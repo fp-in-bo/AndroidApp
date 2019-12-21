@@ -10,9 +10,8 @@ import dagger.Subcomponent
 interface EventsSubComponent {
     fun inject(eventsFragment: EventsFragment)
 
-
     @Subcomponent.Builder
     interface Builder : SubComponentBuilder<EventsSubComponent> {
-        fun eventsModule(eventsModule: EventsModule) : Builder
+        fun eventsModule(eventsModule: EventsModule): Builder
     }
 }

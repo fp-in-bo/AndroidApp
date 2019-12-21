@@ -25,10 +25,6 @@ import javax.inject.Inject
 
 class EventsFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = EventsFragment()
-    }
-
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -50,7 +46,7 @@ class EventsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(EventsViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(EventsViewModel::class.java)
 
         viewModel.state.observe(this, Observer {
 

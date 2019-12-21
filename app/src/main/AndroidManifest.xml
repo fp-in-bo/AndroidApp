@@ -19,6 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".push.FPInBoFirebaseMessagingService"
             android:exported="false">
@@ -33,8 +34,6 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/accent" />
-
     </application>
-
 
 </manifest>
