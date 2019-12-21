@@ -2,7 +2,9 @@ package com.fpinbo.app
 
 import android.app.Application
 import android.content.Context
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.fpinbo.app.inject.*
+import com.fpinbo.app.utils.LifeCycleLogger
 import javax.inject.Provider
 
 class FPInBoApplication : Application(), HasSubComponentBuilders {
@@ -20,8 +22,16 @@ class FPInBoApplication : Application(), HasSubComponentBuilders {
     override fun onCreate() {
         super.onCreate()
         appComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
+        setupLifeCycleLogger()
     }
 
     override fun subComponentBuilders(): Map<Class<*>, Provider<SubComponentBuilder<*>>> =
         appComponent.subComponentBuilders()
+
+    private fun setupLifeCycleLogger() {
+        val lifeCycleLogger = LifeCycleLogger()
+        registerActivityLifecycleCallbacks(lifeCycleLogger)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(lifeCycleLogger)
+    }
+
 }
