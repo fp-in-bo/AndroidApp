@@ -4,6 +4,12 @@
 ## How to build
     ./gradlew build
 
+## How to create a new beta release
+    ./gradlew assembleDebug appDistributionUploadDebug
+
+This task is also run in Continuous Integration when a tag is pushed
+
+
 ### Firebase Config
 This app is using Firebase, hence to build it a _google-services.json_ is needed.
 
