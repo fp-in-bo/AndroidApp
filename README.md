@@ -9,6 +9,10 @@
 
 This task is also run in Continuous Integration when a tag is pushed
 
+## How to apply for beta testing
+
+Just open a PR, updating the content of data/testers.txt
+
 
 ### Firebase Config
 This app is using Firebase, hence to build it a _google-services.json_ is needed.
