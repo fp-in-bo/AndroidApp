@@ -39,7 +39,8 @@ class FirebaseAuthWrapper @Inject constructor(
         .setAvailableProviders(
             listOf(
                 AuthUI.IdpConfig.EmailBuilder().build(),
-                AuthUI.IdpConfig.GoogleBuilder().build()
+                AuthUI.IdpConfig.GoogleBuilder().build(),
+                AuthUI.IdpConfig.TwitterBuilder().build()
             )
         )
         .build()
