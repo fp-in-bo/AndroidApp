@@ -19,15 +19,12 @@ import com.fpinbo.app.events.Loading
 import com.fpinbo.app.events.inject.EventsModule
 import com.fpinbo.app.events.inject.EventsSubComponent
 import com.fpinbo.app.utils.exhaustive
+import com.fpinbo.app.utils.hide
 import com.fpinbo.app.utils.subComponentBuilder
 import kotlinx.android.synthetic.main.events_fragment.*
 import javax.inject.Inject
 
 class EventsFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = EventsFragment()
-    }
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -50,7 +47,7 @@ class EventsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(EventsViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(EventsViewModel::class.java)
 
         viewModel.state.observe(this, Observer {
 
@@ -83,7 +80,4 @@ class EventsFragment : Fragment() {
         error.text = data.message
         hide(loader, list)
     }
-
-    private fun hide(vararg views: View) = views.forEach { it.isVisible = false }
-
 }
