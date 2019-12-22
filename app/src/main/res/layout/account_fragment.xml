@@ -1,13 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".account.view.AccountFragment">
 
+
     <TextView
+        android:id="@+id/error"
+        style="@style/TextAppearance.AppCompat.Display1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        android:gravity="center"
+        tools:text="Error" />
+
+    <com.fpinbo.app.account.view.LoggedView
+        android:id="@+id/logged_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <com.fpinbo.app.account.view.NotLoggedView
+        android:id="@+id/not_logged_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/loader"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_gravity="center" />
+
 
 </FrameLayout>
