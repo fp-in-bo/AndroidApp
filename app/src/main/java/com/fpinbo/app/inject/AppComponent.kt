@@ -1,5 +1,6 @@
 package com.fpinbo.app.inject
 
+import com.fpinbo.app.network.NetworkModule
 import dagger.Component
 import javax.inject.Provider
 import javax.inject.Singleton
@@ -9,7 +10,8 @@ import javax.inject.Singleton
     modules = [
         AppModule::class,
         ViewModelBuilder::class,
-        FeatureBinderModule::class
+        FeatureBinderModule::class,
+        NetworkModule::class
     ]
 )
 interface AppComponent {
