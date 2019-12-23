@@ -79,7 +79,7 @@ dependencies {
     kapt 'androidx.lifecycle:lifecycle-common-java8:2.1.0'
 
     implementation "com.google.dagger:dagger:2.25.3"
-    kapt "com.google.dagger:dagger-compiler:2.25.2"
+    kapt "com.google.dagger:dagger-compiler:2.25.3"
 
     implementation("io.coil-kt:coil:0.8.0")
 
