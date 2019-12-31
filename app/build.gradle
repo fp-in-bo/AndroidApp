@@ -91,7 +91,7 @@ dependencies {
     implementation "com.google.dagger:dagger:2.25.4"
     kapt "com.google.dagger:dagger-compiler:2.25.4"
 
-    implementation "io.coil-kt:coil:0.8.0"
+    implementation "io.coil-kt:coil:0.9.1"
     implementation "com.squareup.retrofit2:retrofit:2.7.0"
     implementation "com.squareup.okhttp3:okhttp:4.2.2"
     implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.4.0'
