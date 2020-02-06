@@ -85,7 +85,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.2.1'
     implementation 'androidx.navigation:navigation-ui:2.2.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.2.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.2.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.2.1'
     kapt 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
 
     implementation "com.google.dagger:dagger:2.26"
