@@ -1,5 +1,7 @@
 package com.fpinbo.app.events
 
+import com.fpinbo.app.entities.Event
+
 sealed class EventsState
 
 object Loading : EventsState()
@@ -13,9 +15,3 @@ data class Error(
 ) : EventsState()
 
 
-data class Event(
-    val title: String,
-    val speaker: String,
-    val imageUrl: String,
-    val description: String
-)
