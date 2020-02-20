@@ -11,6 +11,9 @@
         android:label="@string/title_events"
         tools:layout="@layout/events_fragment">
 
+        <action
+            android:id="@+id/action_home_to_event_fragment"
+            app:destination="@id/event_fragment" />
     </fragment>
 
     <fragment
@@ -18,5 +21,15 @@
         android:name="com.fpinbo.app.account.view.AccountFragment"
         android:label="@string/title_account"
         tools:layout="@layout/account_fragment" />
+
+    <fragment
+        android:id="@+id/event_fragment"
+        android:name="com.fpinbo.app.event.view.EventFragment"
+        android:label="@string/event"
+        tools:layout="@layout/event_fragment">
+        <argument
+            android:name="Event"
+            app:argType="com.fpinbo.app.entities.Event" />
+    </fragment>
 
 </navigation>

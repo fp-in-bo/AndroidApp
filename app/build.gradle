@@ -5,6 +5,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.firebase.appdistribution'
 apply plugin: 'kotlinx-serialization'
+apply plugin: "androidx.navigation.safeargs"
 
 buildscript {
     repositories {
@@ -17,7 +18,6 @@ buildscript {
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
 
     defaultConfig {
         applicationId "com.fpinbo.app"
@@ -79,19 +79,22 @@ dependencies {
     implementation "androidx.transition:transition:1.3.1"
 
 
+    def nav_version = "2.3.0-alpha01"
+    implementation "androidx.navigation:navigation-fragment:$nav_version"
+    implementation "androidx.navigation:navigation-ui:$nav_version"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
-    implementation 'androidx.navigation:navigation-fragment:2.2.1'
-    implementation 'androidx.navigation:navigation-ui:2.2.1'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.2.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.2.1'
+
     kapt 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
 
     implementation "com.google.dagger:dagger:2.26"
     kapt "com.google.dagger:dagger-compiler:2.26"
 
-    implementation "io.coil-kt:coil:0.9.5"
     implementation "com.squareup.retrofit2:retrofit:2.7.1"
     implementation "com.squareup.okhttp3:okhttp:4.4.0"
     implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.4.0'
@@ -108,6 +111,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:19.0.3'
     implementation 'com.google.firebase:firebase-auth:19.2.0'
     implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
+
+    implementation "io.coil-kt:coil:0.9.5"
 
     testImplementation "junit:junit:4.13"
     androidTestImplementation "androidx.test.ext:junit:1.1.1"
