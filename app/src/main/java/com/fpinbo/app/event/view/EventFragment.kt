@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import androidx.transition.Slide
 import androidx.transition.TransitionInflater
 import coil.api.load
 import com.fpinbo.app.R
@@ -34,7 +33,6 @@ class EventFragment : Fragment() {
         super.onCreate(savedInstanceState)
         sharedElementEnterTransition =
             TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-        enterTransition = Slide()
     }
 
     override fun onCreateView(
