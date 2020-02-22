@@ -13,7 +13,7 @@ import com.fpinbo.app.entities.Event
 
 class EventsAdapter(
     private val data: List<Event>,
-    private val listener: (Event, View, View, View) -> Unit
+    private val listener: (Event, View, View, View, View) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     init {
@@ -41,7 +41,7 @@ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(
         event: Event,
-        listener: (Event, View, View, View) -> Unit
+        listener: (Event, View, View, View, View) -> Unit
     ) {
 
         val eventId = event.hashCode()
@@ -56,7 +56,7 @@ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         itemView.setOnClickListener {
             listener(
-                event, title, image, speaker
+                event, title, image, speaker, itemView
             )
         }
     }

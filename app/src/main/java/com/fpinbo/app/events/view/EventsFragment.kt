@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.transition.Fade
+import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import com.fpinbo.app.R
 import com.fpinbo.app.events.Error
@@ -26,6 +27,7 @@ import com.fpinbo.app.utils.hide
 import com.fpinbo.app.utils.subComponentBuilder
 import kotlinx.android.synthetic.main.events_fragment.*
 import javax.inject.Inject
+
 
 class EventsFragment : Fragment() {
 
@@ -76,7 +78,7 @@ class EventsFragment : Fragment() {
 
     private fun bindEvents(data: Events) {
         list.isVisible = true
-        list.adapter = EventsAdapter(data.events) { event, tile, image, speaker ->
+        list.adapter = EventsAdapter(data.events) { event, tile, image, speaker, itemView ->
             val eventId = event.hashCode()
             val destination = EventsFragmentDirections.actionHomeToEventFragment(event)
             val extras = FragmentNavigatorExtras(
@@ -84,6 +86,8 @@ class EventsFragment : Fragment() {
                 image to "image_$eventId",
                 speaker to "speaker_$eventId"
             )
+            (exitTransition as Transition).excludeTarget(itemView, true)
+
             findNavController().navigate(destination, extras)
         }
         postponeEnterTransition()
