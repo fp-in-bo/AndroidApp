@@ -30,7 +30,7 @@ class EventsAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
         holder.bind(data[position], listener)
 
-    override fun getItemId(position: Int) = data[position].hashCode().toLong()
+    override fun getItemId(position: Int) = data[position].id.toLong()
 }
 
 class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -44,7 +44,7 @@ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         listener: (Event, View, View, View, View) -> Unit
     ) {
 
-        val eventId = event.hashCode()
+        val eventId = event.id
 
         ViewCompat.setTransitionName(title, "title_$eventId")
         ViewCompat.setTransitionName(image, "image_$eventId")

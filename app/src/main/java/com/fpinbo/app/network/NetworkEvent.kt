@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NetworkEvent(
+    @SerialName("id") val id: Int,
     @SerialName("title") val title: String,
     @SerialName("speaker") val speaker: String,
     @SerialName("imageUrl") val imageUrl: String,

@@ -39,6 +39,7 @@ class EventsViewModel @Inject constructor(
         .map { listOfNetworkEvent ->
             listOfNetworkEvent.map {
                 Event(
+                    it.id,
                     it.title,
                     it.speaker,
                     it.imageUrl,
