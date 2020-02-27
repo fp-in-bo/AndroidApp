@@ -44,6 +44,7 @@ android {
             firebaseAppDistribution {
                 releaseNotesFile = "CHANGELOG.txt"
                 testersFile = "data/testers.txt"
+                apkPath = "app/build/outputs/apk/debug/app-debug.apk"
             }
         }
         release {
