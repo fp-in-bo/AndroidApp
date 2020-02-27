@@ -79,7 +79,7 @@ class EventsFragment : Fragment() {
     private fun bindEvents(data: Events) {
         list.isVisible = true
         list.adapter = EventsAdapter(data.events) { event, tile, image, speaker, itemView ->
-            val eventId = event.hashCode()
+            val eventId = event.id
             val destination = EventsFragmentDirections.actionHomeToEventFragment(event)
             val extras = FragmentNavigatorExtras(
                 tile to "title_$eventId",

@@ -46,7 +46,7 @@ class EventFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val event = args.event
-        val eventId = event.hashCode()
+        val eventId = event.id
 
         ViewCompat.setTransitionName(title, "title_$eventId")
         ViewCompat.setTransitionName(image, "image_$eventId")
