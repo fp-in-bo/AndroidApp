@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.unsafeRunAsyncInViewModel
 import arrow.fx.IO
-import com.fpinbo.app.entities.Event
 import com.fpinbo.app.network.Api
+import com.fpinbo.app.network.toEntity
 import com.fpinbo.app.network.toIO
 import javax.inject.Inject
 
@@ -38,13 +38,7 @@ class EventsViewModel @Inject constructor(
     private fun retrieveData(): IO<Events> = api.events().toIO()
         .map { listOfNetworkEvent ->
             listOfNetworkEvent.map {
-                Event(
-                    it.id,
-                    it.title,
-                    it.speaker,
-                    it.imageUrl,
-                    it.description
-                )
+                it.toEntity()
             }
         }.map {
             Events(it)

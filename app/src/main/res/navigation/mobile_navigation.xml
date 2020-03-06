@@ -29,7 +29,12 @@
         tools:layout="@layout/event_fragment">
         <argument
             android:name="Event"
-            app:argType="com.fpinbo.app.entities.Event" />
+            app:argType="com.fpinbo.app.entities.Event"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="fpinbo://event/{id}" />
     </fragment>
 
 </navigation>

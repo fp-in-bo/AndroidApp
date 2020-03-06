@@ -2,7 +2,8 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:transitionName="shared_element_container">
 
     <LinearLayout
         android:id="@+id/root"
@@ -17,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
+            android:minHeight="240dp"
             android:scaleType="centerInside"
             tools:ignore="ContentDescription"
             tools:src="@tools:sample/backgrounds/scenic" />
