@@ -1,5 +1,6 @@
 package com.fpinbo.app.network
 
+import com.fpinbo.app.entities.Event
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -10,4 +11,12 @@ data class NetworkEvent(
     @SerialName("speaker") val speaker: String,
     @SerialName("imageUrl") val imageUrl: String,
     @SerialName("description") val description: String
+)
+
+fun NetworkEvent.toEntity(): Event = Event(
+    id = id,
+    title = title,
+    speaker = speaker,
+    imageUrl = imageUrl,
+    description = description
 )

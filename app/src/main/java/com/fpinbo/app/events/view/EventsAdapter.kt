@@ -13,7 +13,7 @@ import com.fpinbo.app.entities.Event
 
 class EventsAdapter(
     private val data: List<Event>,
-    private val listener: (Event, View, View, View, View) -> Unit
+    private val listener: (Event, View) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     init {
@@ -35,28 +35,24 @@ class EventsAdapter(
 
 class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+    private val root = itemView.findViewById<View>(R.id.root)
     private val title: TextView = itemView.findViewById(R.id.title)
     private val image: ImageView = itemView.findViewById(R.id.image)
     private val speaker: TextView = itemView.findViewById(R.id.speaker)
 
     fun bind(
         event: Event,
-        listener: (Event, View, View, View, View) -> Unit
+        listener: (Event, View) -> Unit
     ) {
-
-        val eventId = event.id
-
-        ViewCompat.setTransitionName(title, "title_$eventId")
-        ViewCompat.setTransitionName(image, "image_$eventId")
-        ViewCompat.setTransitionName(speaker, "speaker_$eventId")
 
         title.text = event.title
         image.load(event.imageUrl)
         speaker.text = event.speaker
 
         itemView.setOnClickListener {
+            ViewCompat.setTransitionName(itemView, "shared_element_container")
             listener(
-                event, title, image, speaker, itemView
+                event, root
             )
         }
     }

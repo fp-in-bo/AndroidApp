@@ -12,8 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import androidx.transition.Fade
-import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import com.fpinbo.app.R
 import com.fpinbo.app.events.Error
@@ -45,11 +43,6 @@ class EventsFragment : Fragment() {
         super.onAttach(context)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        exitTransition = Fade()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -78,16 +71,12 @@ class EventsFragment : Fragment() {
 
     private fun bindEvents(data: Events) {
         list.isVisible = true
-        list.adapter = EventsAdapter(data.events) { event, tile, image, speaker, itemView ->
-            val eventId = event.id
-            val destination = EventsFragmentDirections.actionHomeToEventFragment(event)
+        list.adapter = EventsAdapter(data.events) { event, itemView ->
+            val destination =
+                EventsFragmentDirections.actionHomeToEventFragment().apply { setEvent(event) }
             val extras = FragmentNavigatorExtras(
-                tile to "title_$eventId",
-                image to "image_$eventId",
-                speaker to "speaker_$eventId"
+                itemView to "shared_element_container"
             )
-            (exitTransition as Transition).excludeTarget(itemView, true)
-
             findNavController().navigate(destination, extras)
         }
         postponeEnterTransition()
