@@ -6,4 +6,6 @@
     <string name="button_login">Login</string>
     <string name="error_generic">An error has occurred</string>
     <string name="event">Event</string>
+    <string name="video_button">Video</string>
+    <string name="share_button">Share</string>
 </resources>

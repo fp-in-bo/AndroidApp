@@ -1,13 +1,15 @@
 package com.fpinbo.app.event.view
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.BounceInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -84,6 +86,22 @@ class EventFragment : Fragment() {
         speaker.text = event.speaker
         description.text = event.description
 
+
+        shareButton.setOnClickListener {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "${event.title} - ${event.shareUrl}")
+            startActivity(Intent.createChooser(shareIntent, event.title))
+        }
+
+        if (event.videoUrl == null) {
+            videoButton.isVisible = false
+        } else {
+            videoButton.isVisible = true
+            videoButton.setOnClickListener {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(event.videoUrl)))
+            }
+        }
     }
 
     private fun bindError(error: Error) {
