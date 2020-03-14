@@ -10,7 +10,8 @@ data class NetworkEvent(
     @SerialName("title") val title: String,
     @SerialName("speaker") val speaker: String,
     @SerialName("imageUrl") val imageUrl: String,
-    @SerialName("description") val description: String
+    @SerialName("description") val description: String,
+    @SerialName("videoUrl") val videoUrl: String? = null
 )
 
 fun NetworkEvent.toEntity(): Event = Event(
@@ -18,5 +19,7 @@ fun NetworkEvent.toEntity(): Event = Event(
     title = title,
     speaker = speaker,
     imageUrl = imageUrl,
-    description = description
+    description = description,
+    videoUrl = videoUrl,
+    shareUrl = "https://fp-in-bo.github.io/$id.html"
 )
