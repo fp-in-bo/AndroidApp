@@ -103,7 +103,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0" // JVM dependency
 
     implementation "io.arrow-kt:arrow-core:0.10.5"
-    implementation "io.arrow-kt:arrow-syntax:0.10.4"
+    implementation "io.arrow-kt:arrow-syntax:0.10.5"
     implementation "io.arrow-kt:arrow-fx:0.10.5"
 
     implementation 'com.google.firebase:firebase-analytics:17.3.0'
