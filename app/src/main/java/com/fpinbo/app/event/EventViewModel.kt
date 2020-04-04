@@ -53,7 +53,7 @@ class EventViewModel @Inject constructor(
     private fun eventInExtras(eventFromArgs: Event?) = eventFromArgs != null
 
     private fun idInDeeplink(intentData: Uri?) =
-        intentData != null && intentData.host == "fp-in-bo.github.io" && !intentData.lastPathSegment.isNullOrBlank()
+        intentData != null && intentData.host == "fpinbo.dev" && !intentData.lastPathSegment.isNullOrBlank()
 
     private fun loadEventFromNetwork(lastPathSegment: String): IO<EventState> {
         val idFromUri = lastPathSegment.replace(".html", "")

@@ -21,5 +21,5 @@ fun NetworkEvent.toEntity(): Event = Event(
     imageUrl = imageUrl,
     description = description,
     videoUrl = videoUrl,
-    shareUrl = "https://fp-in-bo.github.io/$id.html"
+    shareUrl = "https://fpinbo.dev/$id.html"
 )
