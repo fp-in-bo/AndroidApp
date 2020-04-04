@@ -34,7 +34,7 @@
             app:nullable="true" />
         <deepLink
             android:id="@+id/deepLink"
-            app:uri="https://fp-in-bo.github.io/{id}.html" />
+            app:uri="https://fpinbo.dev/{id}.html" />
     </fragment>
 
 </navigation>

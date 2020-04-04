@@ -13,7 +13,7 @@ import javax.inject.Singleton
 class NetworkModule {
 
     companion object {
-        private const val BASE_URL = "https://fp-in-bo.github.io/data/"
+        private const val BASE_URL = "https://fpinbo.dev/data/"
     }
 
     @Provides
