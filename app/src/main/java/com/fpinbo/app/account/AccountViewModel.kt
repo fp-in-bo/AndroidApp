@@ -5,7 +5,8 @@ import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.unsafeRunAsyncInViewModel
+import androidx.lifecycle.viewModelScope
+import arrow.integrations.kotlinx.unsafeRunScoped
 import com.firebase.ui.auth.IdpResponse
 import com.fpinbo.app.utils.Event
 import javax.inject.Inject
@@ -43,7 +44,7 @@ class AccountViewModel @Inject constructor(
 
     fun logOut() {
         _state.value = Loading
-        authenticator.logout().unsafeRunAsyncInViewModel(this) { result ->
+        authenticator.logout().unsafeRunScoped(viewModelScope) { result ->
             val state = result.fold(
                 ifLeft = {
                     Error(it.message.orEmpty())

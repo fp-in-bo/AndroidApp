@@ -2,8 +2,12 @@ package com.fpinbo.app.event
 
 import android.content.Intent
 import android.net.Uri
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import arrow.fx.IO
+import arrow.integrations.kotlinx.unsafeRunScoped
 import com.fpinbo.app.entities.Event
 import com.fpinbo.app.event.view.EventFragmentArgs
 import com.fpinbo.app.network.Api
@@ -41,7 +45,7 @@ class EventViewModel @Inject constructor(
             }
             else -> IO.just(invalidInput)
         }
-            .unsafeRunAsyncInViewModel(this@EventViewModel) { result ->
+            .unsafeRunScoped(viewModelScope) { result ->
                 val viewState = result.fold(
                     ifLeft = { Error(it.message.orEmpty()) },
                     ifRight = { it }
