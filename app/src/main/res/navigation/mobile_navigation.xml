@@ -37,4 +37,9 @@
             app:uri="https://fpinbo.dev/{id}.html" />
     </fragment>
 
+    <fragment
+        android:id="@+id/navigation_about"
+        android:name="com.fpinbo.app.about.AboutFragment"
+        android:label="@string/title_about" />
+
 </navigation>
