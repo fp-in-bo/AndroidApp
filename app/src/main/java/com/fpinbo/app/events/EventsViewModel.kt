@@ -3,8 +3,9 @@ package com.fpinbo.app.events
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.unsafeRunAsyncInViewModel
+import androidx.lifecycle.viewModelScope
 import arrow.fx.IO
+import arrow.integrations.kotlinx.unsafeRunScoped
 import com.fpinbo.app.network.Api
 import com.fpinbo.app.network.toEntity
 import com.fpinbo.app.network.toIO
@@ -25,8 +26,9 @@ class EventsViewModel @Inject constructor(
 
     private fun loadData() {
         _state.value = Loading
+
         retrieveData()
-            .unsafeRunAsyncInViewModel(this) { result ->
+            .unsafeRunScoped(viewModelScope) { result ->
                 val viewState = result.fold(
                     ifLeft = { Error(it.message.orEmpty()) },
                     ifRight = { Events(it.events) }

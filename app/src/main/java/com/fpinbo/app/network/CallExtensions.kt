@@ -3,13 +3,14 @@ package com.fpinbo.app.network
 import arrow.core.left
 import arrow.core.right
 import arrow.fx.IO
+import arrow.fx.IO.Companion.cancellable
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 fun <T> Call<T>.toIO(): IO<T> {
 
-    return IO.cancelable { callback ->
+    return cancellable { callback ->
 
         enqueue(object : Callback<T> {
             override fun onFailure(call: Call<T>, t: Throwable) = callback(t.left())
