@@ -89,8 +89,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
-
-    kapt 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
 
     implementation "com.google.dagger:dagger:2.27"
     kapt "com.google.dagger:dagger-compiler:2.27"
@@ -113,6 +112,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:19.3.0'
     implementation 'com.firebaseui:firebase-ui-auth:6.2.1'
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
+    implementation 'com.google.firebase:firebase-analytics:17.3.0'
 
     implementation "io.coil-kt:coil:0.9.5"
     implementation 'com.github.medyo:android-about-page:1.2.5'
@@ -120,6 +120,10 @@ dependencies {
 
 
     testImplementation "junit:junit:4.13"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
+    testImplementation 'com.jraska.livedata:testing-ktx:1.1.2'
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
+    testImplementation 'org.robolectric:robolectric:4.3.1'
     androidTestImplementation "androidx.test.ext:junit:1.1.1"
     androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0"
 }

@@ -6,24 +6,23 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.crashlytics.android.Crashlytics
+import javax.inject.Inject
 
 private const val APP_STATUS = "APP_STATUS"
 private const val LAST_SCREEN = "LAST_SCREEN"
 
-class LifeCycleLogger : Application.ActivityLifecycleCallbacks, LifecycleObserver {
+class LifeCycleLogger @Inject constructor() : Application.ActivityLifecycleCallbacks,
+    DefaultLifecycleObserver {
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun onMoveToForeground() {
+    override fun onStart(owner: LifecycleOwner) {
         Crashlytics.log("Foreground")
         Crashlytics.setString(APP_STATUS, "Foreground")
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun onMoveToBackground() {
+    override fun onStop(owner: LifecycleOwner) {
         Crashlytics.log("Background")
         Crashlytics.setString(APP_STATUS, "Background")
     }

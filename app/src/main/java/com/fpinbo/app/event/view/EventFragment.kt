@@ -92,6 +92,7 @@ class EventFragment : Fragment() {
             shareIntent.type = "text/plain"
             shareIntent.putExtra(Intent.EXTRA_TEXT, "${event.title} - ${event.shareUrl}")
             startActivity(Intent.createChooser(shareIntent, event.title))
+            viewModel.trackShare(event)
         }
 
         if (event.videoUrl == null) {
