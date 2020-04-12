@@ -6,10 +6,10 @@ android:
   - platform-tools
   - build-tools-29.0.0
   - android-29
-
+  
 before_install:
-- openssl aes-256-cbc -K $encrypted_bc03efe4780f_key -iv $encrypted_bc03efe4780f_iv
-  -in google-services.json.enc -out app/google-services.json -d
+- openssl aes-256-cbc -K $encrypted_3b9f0b9d36d1_key -iv $encrypted_3b9f0b9d36d1_iv -in secrets.tar.enc -out secrets.tar -d
+- tar xvf secrets.tar
 - yes | sdkmanager tools
 
 before_script:
