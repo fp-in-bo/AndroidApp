@@ -1,37 +1,35 @@
 package com.fpinbo.app
 
 import android.app.Application
-import android.content.Context
+import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.fpinbo.app.inject.*
-import com.fpinbo.app.utils.LifeCycleLogger
+import javax.inject.Inject
 import javax.inject.Provider
 
 class FPInBoApplication : Application(), HasSubComponentBuilders {
 
-    companion object {
-        fun getAppComponent(context: Context): AppComponent {
-            val app = context.applicationContext as FPInBoApplication
-            return app.appComponent
-        }
-    }
-
 
     private lateinit var appComponent: AppComponent
+
+    @Inject
+    lateinit var appListeners: Set<@JvmSuppressWildcards LifecycleObserver>
 
     override fun onCreate() {
         super.onCreate()
         appComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
-        setupLifeCycleLogger()
+        appComponent.inject(this)
+        setupAppObservers()
     }
 
     override fun subComponentBuilders(): Map<Class<*>, Provider<SubComponentBuilder<*>>> =
         appComponent.subComponentBuilders()
 
-    private fun setupLifeCycleLogger() {
-        val lifeCycleLogger = LifeCycleLogger()
-        registerActivityLifecycleCallbacks(lifeCycleLogger)
-        ProcessLifecycleOwner.get().lifecycle.addObserver(lifeCycleLogger)
+    private fun setupAppObservers() {
+        val appLifecycle = ProcessLifecycleOwner.get().lifecycle
+        appListeners.forEach {
+            appLifecycle.addObserver(it)
+        }
     }
 
 }

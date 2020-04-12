@@ -17,7 +17,7 @@ class FirebaseAuthWrapper @Inject constructor(
 ) : Authenticator {
 
     override fun currentUser(): User? = firebaseAuth.currentUser?.let {
-        User(it.displayName, it.email, it.photoUrl)
+        User(it.displayName, it.email, it.photoUrl.toString())
     }
 
     override fun logout(): IO<Unit> = IO.async { callback ->

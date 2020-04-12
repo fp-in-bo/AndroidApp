@@ -78,6 +78,7 @@ class EventsFragment : Fragment() {
                 itemView to "shared_element_container"
             )
             findNavController().navigate(destination, extras)
+            viewModel.trackSelectItem(event)
         }
         postponeEnterTransition()
         list.viewTreeObserver.addOnPreDrawListener {

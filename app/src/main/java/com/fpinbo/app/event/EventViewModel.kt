@@ -8,18 +8,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.fx.IO
 import arrow.integrations.kotlinx.unsafeRunScoped
+import com.fpinbo.app.analytics.Tracker
 import com.fpinbo.app.entities.Event
 import com.fpinbo.app.event.view.EventFragmentArgs
 import com.fpinbo.app.network.Api
 import com.fpinbo.app.network.toEntity
-import com.fpinbo.app.network.toIO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class EventViewModel @Inject constructor(
     private val intent: Intent,
     private val args: EventFragmentArgs,
-    private val api: Api
+    private val api: Api,
+    private val tracker: Tracker
 ) : ViewModel() {
 
     private val _state = MutableLiveData<EventState>()
@@ -32,6 +33,8 @@ class EventViewModel @Inject constructor(
     init {
         loadData()
     }
+
+    fun trackShare(event: Event) = tracker.share(event.id.toString())
 
     private fun loadData() = viewModelScope.launch {
         val eventFromArgs = args.event
@@ -61,7 +64,7 @@ class EventViewModel @Inject constructor(
 
     private fun loadEventFromNetwork(lastPathSegment: String): IO<EventState> {
         val idFromUri = lastPathSegment.replace(".html", "")
-        return api.events().toIO().map { listOfNetworkEvent ->
+        return api.events().map { listOfNetworkEvent ->
             val networkEvent =
                 listOfNetworkEvent.firstOrNull { it.id.toString() == idFromUri }
             if (networkEvent != null) {

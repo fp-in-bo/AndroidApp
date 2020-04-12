@@ -8,11 +8,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.integrations.kotlinx.unsafeRunScoped
 import com.firebase.ui.auth.IdpResponse
+import com.fpinbo.app.analytics.Tracker
 import com.fpinbo.app.utils.Event
 import javax.inject.Inject
 
 class AccountViewModel @Inject constructor(
-    private val authenticator: Authenticator
+    private val authenticator: Authenticator,
+    private val tracker: Tracker
 ) : ViewModel() {
 
     private val _state = MutableLiveData<AccountState>()
@@ -57,14 +59,25 @@ class AccountViewModel @Inject constructor(
 
     fun onLoginResult(resultCode: Int, data: Intent?) {
 
-        val response = IdpResponse.fromResultIntent(data)
+        val response: IdpResponse = IdpResponse.fromResultIntent(data)!!
 
         val state = if (resultCode == Activity.RESULT_OK) {
             Logged(authenticator.currentUser()!!)
         } else {
-            Error(response?.error?.message)
+            Error(response.error?.message)
         }
         _state.value = state
+        track(response)
+    }
+
+    private fun track(response: IdpResponse) {
+        val provider = response.providerType.orEmpty()
+
+        if (!response.isNewUser) {
+            tracker.login(provider)
+        } else {
+            tracker.signUp(provider)
+        }
     }
 
 }

@@ -6,13 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.fx.IO
 import arrow.integrations.kotlinx.unsafeRunScoped
+import com.fpinbo.app.analytics.Tracker
+import com.fpinbo.app.entities.Event
 import com.fpinbo.app.network.Api
 import com.fpinbo.app.network.toEntity
-import com.fpinbo.app.network.toIO
 import javax.inject.Inject
 
 class EventsViewModel @Inject constructor(
-    private val api: Api
+    private val api: Api,
+    private val tracker: Tracker
 ) : ViewModel() {
 
     private val _state = MutableLiveData<EventsState>()
@@ -37,7 +39,7 @@ class EventsViewModel @Inject constructor(
             }
     }
 
-    private fun retrieveData(): IO<Events> = api.events().toIO()
+    private fun retrieveData(): IO<Events> = api.events()
         .map { listOfNetworkEvent ->
             listOfNetworkEvent.map {
                 it.toEntity()
@@ -45,4 +47,6 @@ class EventsViewModel @Inject constructor(
         }.map {
             Events(it)
         }
+
+    fun trackSelectItem(event: Event) = tracker.selectItem(event.id.toString(), event.title)
 }
