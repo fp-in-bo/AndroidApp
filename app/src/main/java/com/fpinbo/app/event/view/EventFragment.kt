@@ -51,7 +51,7 @@ class EventFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = MaterialContainerTransform(requireContext()).apply {
+        sharedElementEnterTransition = MaterialContainerTransform().apply {
             scrimColor = ContextCompat.getColor(requireContext(), R.color.transparent)
             interpolator = OvershootInterpolator()
             duration = 600
