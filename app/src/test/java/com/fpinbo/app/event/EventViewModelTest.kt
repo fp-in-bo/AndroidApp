@@ -8,6 +8,7 @@ import arrow.fx.IO
 import arrow.fx.typeclasses.milliseconds
 import com.fpinbo.app.analytics.Tracker
 import com.fpinbo.app.entities.Event
+import com.fpinbo.app.event.dynamiclink.DynamicLinkBuilder
 import com.fpinbo.app.event.view.EventFragmentArgs
 import com.fpinbo.app.network.Api
 import com.fpinbo.app.network.NetworkEvent
@@ -50,7 +51,7 @@ class EventViewModelTest {
             )
         })
 
-        val sut = buildSut(intent, args, mock())
+        val sut = buildSut(intent, args, mock(), mock())
 
         sut.state.test()
             .awaitValue()
@@ -82,7 +83,7 @@ class EventViewModelTest {
         }
 
 
-        val sut = buildSut(intent, args, api)
+        val sut = buildSut(intent, args, api, mock())
 
         sut.state.test()
             .awaitValue()
@@ -115,7 +116,7 @@ class EventViewModelTest {
         }
 
 
-        val sut = buildSut(intent, args, api)
+        val sut = buildSut(intent, args, api, mock())
 
         sut.state.test()
             .awaitValue()
@@ -132,7 +133,7 @@ class EventViewModelTest {
 
         val args = EventFragmentArgs.fromBundle(Bundle.EMPTY)
 
-        val sut = buildSut(intent, args, mock())
+        val sut = buildSut(intent, args, mock(), mock())
 
         sut.state.test()
             .awaitValue()
@@ -140,20 +141,82 @@ class EventViewModelTest {
     }
 
     @Test
-    fun trackShare() {
-        val sut = buildSut(mock(), mock(), mock())
-
-        sut.trackShare(
-            Event(
-                1,
-                "title",
-                "speaker",
-                "imageUrl",
-                "description",
-                "videoUrl",
-                "shareUrl"
-            )
+    fun shareSuccess() {
+        val event = Event(
+            1,
+            "title",
+            "speaker",
+            "imageUrl",
+            "description",
+            "videoUrl",
+            "shareUrl"
         )
+
+        val dynamicLinkBuilder = mock<DynamicLinkBuilder> {
+            on { build(event) } doReturn IO.just("link")
+        }
+
+        val sut = buildSut(mock(), mock(), mock(), dynamicLinkBuilder)
+
+        sut.onShare(event)
+
+        sut.viewEvent.test()
+            .awaitValue()
+            .assertValue {
+                val intent = (it.content as ShareEvent.Success).intent
+                intent.action == Intent.ACTION_SEND &&
+                        intent.type == "text/plain" &&
+                        intent.getStringExtra(Intent.EXTRA_TEXT) == "title - link"
+            }
+    }
+
+    @Test
+    fun shareError() {
+        val event = Event(
+            1,
+            "title",
+            "speaker",
+            "imageUrl",
+            "description",
+            "videoUrl",
+            "shareUrl"
+        )
+
+        val dynamicLinkBuilder = mock<DynamicLinkBuilder> {
+            on { build(event) } doReturn IO.raiseError(RuntimeException("Error Message"))
+        }
+
+        val sut = buildSut(mock(), mock(), mock(), dynamicLinkBuilder)
+
+        sut.onShare(event)
+
+        sut.viewEvent.test()
+            .awaitValue()
+            .assertValue {
+                val message = (it.content as ShareEvent.Error).message
+                "Error Message" == message
+            }
+    }
+
+    @Test
+    fun trackShare() {
+        val event = Event(
+            1,
+            "title",
+            "speaker",
+            "imageUrl",
+            "description",
+            "videoUrl",
+            "shareUrl"
+        )
+
+        val dynamicLinkBuilder = mock<DynamicLinkBuilder> {
+            on { build(event) } doReturn IO.just("link")
+        }
+
+        val sut = buildSut(mock(), mock(), mock(), dynamicLinkBuilder)
+
+        sut.onShare(event)
 
         verify(tracker).share("1")
     }
@@ -161,6 +224,7 @@ class EventViewModelTest {
     private fun buildSut(
         intent: Intent,
         args: EventFragmentArgs,
-        api: Api
-    ) = EventViewModel(intent, args, api, tracker)
+        api: Api,
+        dynamicLinkBuilder: DynamicLinkBuilder
+    ) = EventViewModel(intent, args, api, dynamicLinkBuilder, tracker)
 }

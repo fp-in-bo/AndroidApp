@@ -9,7 +9,7 @@ import com.firebase.ui.auth.FirebaseUiException
 import com.firebase.ui.auth.IdpResponse
 import com.firebase.ui.auth.util.ExtraConstants
 import com.fpinbo.app.analytics.Tracker
-import com.fpinbo.app.utils.Event
+import com.fpinbo.app.utils.ViewEvent
 import com.jraska.livedata.test
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
@@ -61,9 +61,9 @@ class AccountViewModelTest {
 
         sut.logIn()
 
-        sut.event.test()
+        sut.viewEvent.test()
             .awaitValue()
-            .assertValue(Event(PerformLogin(signInIntent)))
+            .assertValue(ViewEvent(PerformLogin(signInIntent)))
     }
 
     @Test

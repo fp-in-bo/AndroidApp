@@ -3,7 +3,7 @@ package com.fpinbo.app.utils
 /**
  * From: https://medium.com/androiddevelopers/livedata-with-snackbar-navigation-and-other-events-the-singleliveevent-case-ac2622673150
  */
-data class Event<out T>(private val content: T) {
+data class ViewEvent<out T>(val content: T) {
 
     private var hasBeenHandled = false
 
