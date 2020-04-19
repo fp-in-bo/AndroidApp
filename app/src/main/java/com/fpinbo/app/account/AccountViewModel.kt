@@ -59,7 +59,7 @@ class AccountViewModel @Inject constructor(
 
     fun onLoginResult(resultCode: Int, data: Intent?) {
 
-        val response: IdpResponse = IdpResponse.fromResultIntent(data)!!
+        val response: IdpResponse = IdpResponse.fromResultIntent(data) ?: return
 
         val state = if (resultCode == Activity.RESULT_OK) {
             Logged(authenticator.currentUser()!!)
