@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -20,6 +21,7 @@ import com.fpinbo.app.R
 import com.fpinbo.app.event.Data
 import com.fpinbo.app.event.Error
 import com.fpinbo.app.event.EventViewModel
+import com.fpinbo.app.event.ShareEvent
 import com.fpinbo.app.event.inject.EventModule
 import com.fpinbo.app.event.inject.EventSubComponent
 import com.fpinbo.app.utils.exhaustive
@@ -75,7 +77,19 @@ class EventFragment : Fragment() {
                 is Data -> bindData(it)
                 is Error -> bindError(it)
             }
+        })
 
+        viewModel.viewEvent.observe(viewLifecycleOwner, Observer { event ->
+            event.consume {
+                exhaustive..when (it) {
+                    is ShareEvent.Success -> {
+                        startActivity(Intent.createChooser(it.intent, null))
+                    }
+                    is ShareEvent.Error -> {
+                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         })
     }
 
@@ -88,11 +102,7 @@ class EventFragment : Fragment() {
 
 
         shareButton.setOnClickListener {
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.type = "text/plain"
-            shareIntent.putExtra(Intent.EXTRA_TEXT, "${event.title} - ${event.shareUrl}")
-            startActivity(Intent.createChooser(shareIntent, event.title))
-            viewModel.trackShare(event)
+            viewModel.onShare(event)
         }
 
         if (event.videoUrl == null) {

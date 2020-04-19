@@ -65,7 +65,7 @@ class AccountFragment : Fragment() {
             }
         })
 
-        viewModel.event.observe(viewLifecycleOwner, Observer { event ->
+        viewModel.viewEvent.observe(viewLifecycleOwner, Observer { event ->
             event.consume {
                 exhaustive..when (it) {
                     is PerformLogin -> performLogin(it.intent)

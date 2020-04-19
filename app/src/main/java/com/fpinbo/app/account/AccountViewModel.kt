@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import arrow.integrations.kotlinx.unsafeRunScoped
 import com.firebase.ui.auth.IdpResponse
 import com.fpinbo.app.analytics.Tracker
-import com.fpinbo.app.utils.Event
+import com.fpinbo.app.utils.ViewEvent
 import javax.inject.Inject
 
 class AccountViewModel @Inject constructor(
@@ -18,12 +18,12 @@ class AccountViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _state = MutableLiveData<AccountState>()
-    private val _event = MutableLiveData<Event<AccountEvent>>()
+    private val _event = MutableLiveData<ViewEvent<AccountEvent>>()
 
     val state: LiveData<AccountState>
         get() = _state
 
-    val event: LiveData<Event<AccountEvent>>
+    val viewEvent: LiveData<ViewEvent<AccountEvent>>
         get() = _event
 
     init {
@@ -41,7 +41,7 @@ class AccountViewModel @Inject constructor(
     }
 
     fun logIn() {
-        _event.value = Event(PerformLogin(authenticator.signInIntent()))
+        _event.value = ViewEvent(PerformLogin(authenticator.signInIntent()))
     }
 
     fun logOut() {
