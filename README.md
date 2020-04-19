@@ -7,7 +7,8 @@
     ./gradlew build
 
 ## How to create a new beta release
-    ./gradlew assembleDebug appDistributionUploadDebug
+    git log --no-merges --format=%B | head -c 3276  >> CHANGELOG.txt
+    ./gradlew assembleRelease appDistributionUploadRelease
 
 This task is also run in Continuous Integration when a tag is pushed
 
