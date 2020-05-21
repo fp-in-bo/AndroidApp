@@ -102,7 +102,7 @@ dependencies {
     implementation "com.google.dagger:dagger:2.27"
     kapt "com.google.dagger:dagger-compiler:2.27"
 
-    implementation "com.squareup.retrofit2:retrofit:2.8.2"
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.okhttp3:okhttp:4.7.2"
     implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.5.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
