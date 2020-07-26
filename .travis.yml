@@ -18,7 +18,7 @@ before_script:
 
 script:
 - scripts/generate-changelog.sh
-- ./gradlew build
+- ./gradlew assembleDebug
 
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock

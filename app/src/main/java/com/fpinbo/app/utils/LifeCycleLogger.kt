@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import javax.inject.Inject
 
 private const val APP_STATUS = "APP_STATUS"
@@ -17,14 +17,17 @@ private const val LAST_SCREEN = "LAST_SCREEN"
 class LifeCycleLogger @Inject constructor() : Application.ActivityLifecycleCallbacks,
     DefaultLifecycleObserver {
 
+    private val instance = FirebaseCrashlytics.getInstance()
+
+
     override fun onStart(owner: LifecycleOwner) {
-        Crashlytics.log("Foreground")
-        Crashlytics.setString(APP_STATUS, "Foreground")
+        instance.log("Foreground")
+        instance.setCustomKey(APP_STATUS, "Foreground")
     }
 
     override fun onStop(owner: LifecycleOwner) {
-        Crashlytics.log("Background")
-        Crashlytics.setString(APP_STATUS, "Background")
+        instance.log("Background")
+        instance.setCustomKey(APP_STATUS, "Background")
     }
 
     private val fragmentListener = object :
@@ -36,17 +39,17 @@ class LifeCycleLogger @Inject constructor() : Application.ActivityLifecycleCallb
             savedInstanceState: Bundle?
         ) {
             val fragmentLog = "Created ${f.javaClass.simpleName}: ${f.arguments}"
-            Crashlytics.log(fragmentLog)
-            Crashlytics.setString(LAST_SCREEN, fragmentLog)
+            instance.log(fragmentLog)
+            instance.setCustomKey(LAST_SCREEN, fragmentLog)
         }
     }
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
 
         val activityLog = "Created ${activity.componentName}: ${activity.intent}"
-        Crashlytics.setString(LAST_SCREEN, activityLog)
+        instance.setCustomKey(LAST_SCREEN, activityLog)
 
-        Crashlytics.log(activityLog)
+        instance.log(activityLog)
 
         if (activity is FragmentActivity) {
             activity.supportFragmentManager.registerFragmentLifecycleCallbacks(
