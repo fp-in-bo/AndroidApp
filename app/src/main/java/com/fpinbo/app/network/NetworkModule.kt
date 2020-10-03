@@ -20,11 +20,17 @@ class NetworkModule {
     @Singleton
     fun provideApi(): Api {
         val contentType = "application/json".toMediaType()
+        val json = Json {
+            ignoreUnknownKeys = true
+            isLenient = true
+            allowSpecialFloatingPointValues = true
+            prettyPrint = true
+        }
 
         val retrofit = Builder()
             .baseUrl(BASE_URL)
             .addCallAdapterFactory(IOAdapterFactory.create())
-            .addConverterFactory(Json.nonstrict.asConverterFactory(contentType))
+            .addConverterFactory(json.asConverterFactory(contentType))
             .build()
 
         return retrofit.create(Api::class.java)
