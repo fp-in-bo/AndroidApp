@@ -10,7 +10,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
-import coil.api.load
+import coil.load
 import com.fpinbo.app.R
 import com.fpinbo.app.account.User
 
