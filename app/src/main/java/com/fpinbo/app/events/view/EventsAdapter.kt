@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
-import coil.api.load
+import coil.load
 import com.fpinbo.app.R
 import com.fpinbo.app.entities.Event
 

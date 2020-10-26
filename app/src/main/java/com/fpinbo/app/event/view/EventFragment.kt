@@ -16,7 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
-import coil.api.load
+import coil.load
 import com.fpinbo.app.R
 import com.fpinbo.app.event.Data
 import com.fpinbo.app.event.Error
