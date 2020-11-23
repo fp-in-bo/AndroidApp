@@ -103,7 +103,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
 
-    implementation "com.google.dagger:dagger:2.29.1"
+    implementation "com.google.dagger:dagger:2.30"
     kapt "com.google.dagger:dagger-compiler:2.29.1"
 
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
