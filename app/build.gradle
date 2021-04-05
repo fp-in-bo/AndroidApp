@@ -129,7 +129,7 @@ dependencies {
 
     implementation "io.coil-kt:coil:1.1.1"
     implementation 'com.github.medyo:android-about-page:1.2.5'
-    implementation 'com.airbnb.android:lottie:3.6.1'
+    implementation 'com.airbnb.android:lottie:3.7.0'
 
 
     testImplementation "junit:junit:4.13.2"
