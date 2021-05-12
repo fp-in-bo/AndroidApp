@@ -125,7 +125,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:7.1.1'
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
     implementation 'com.google.firebase:firebase-analytics:18.0.3'
-    implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.1'
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx:20.0.0'
 
     implementation "io.coil-kt:coil:1.2.1"
     implementation 'com.github.medyo:android-about-page:1.2.5'
