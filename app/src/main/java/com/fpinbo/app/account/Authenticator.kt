@@ -1,13 +1,13 @@
 package com.fpinbo.app.account
 
 import android.content.Intent
-import arrow.fx.IO
+import arrow.core.Either
 
 interface Authenticator {
 
     fun currentUser(): User?
 
-    fun logout(): IO<Unit>
+    suspend fun logout(): Either<Throwable,Unit>
 
     fun signInIntent(): Intent
 }

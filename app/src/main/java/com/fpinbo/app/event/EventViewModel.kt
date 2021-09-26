@@ -6,8 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import arrow.fx.IO
-import arrow.integrations.kotlinx.unsafeRunScoped
+import arrow.core.Either
+import arrow.core.right
 import com.fpinbo.app.analytics.Tracker
 import com.fpinbo.app.entities.Event
 import com.fpinbo.app.event.dynamiclink.DynamicLinkBuilder
@@ -45,22 +45,20 @@ class EventViewModel @Inject constructor(
     private fun loadData() = viewModelScope.launch {
         val eventFromArgs = args.event
         val intentData = intent.data
-        when {
+        val viewState: EventState = when {
             eventInExtras(eventFromArgs) -> {
-                IO.just(Data(eventFromArgs!!))
+                Data(eventFromArgs!!).right()
             }
             idInDeeplink(intentData) -> {
                 loadEventFromNetwork(intentData!!.lastPathSegment!!)
             }
-            else -> IO.just(invalidInput)
-        }
-            .unsafeRunScoped(viewModelScope) { result ->
-                val viewState = result.fold(
-                    ifLeft = { Error(it.message.orEmpty()) },
-                    ifRight = { it }
-                )
-                _state.postValue(viewState)
-            }
+            else -> invalidInput.right()
+        }.fold(
+            ifLeft = { Error(it.message.orEmpty()) },
+            ifRight = { it }
+        )
+        _state.postValue(viewState)
+
     }
 
     private fun eventInExtras(eventFromArgs: Event?) = eventFromArgs != null
@@ -68,7 +66,7 @@ class EventViewModel @Inject constructor(
     private fun idInDeeplink(intentData: Uri?) =
         intentData != null && intentData.host == "fpinbo.dev" && !intentData.lastPathSegment.isNullOrBlank()
 
-    private fun loadEventFromNetwork(lastPathSegment: String): IO<EventState> {
+    private suspend fun loadEventFromNetwork(lastPathSegment: String): Either<Throwable, EventState> {
         val idFromUri = lastPathSegment.replace(".html", "")
         return api.events().map { listOfNetworkEvent ->
             val networkEvent =
@@ -82,8 +80,8 @@ class EventViewModel @Inject constructor(
     }
 
     fun onShare(event: Event) {
-        val generateDynamicLink = dynamicLinkBuilder.build(event)
-        generateDynamicLink.unsafeRunScoped(viewModelScope) { result ->
+        viewModelScope.launch {
+            val result = dynamicLinkBuilder.build(event)
             val share = result.fold(
                 ifLeft = { ShareEvent.Error(it.message.orEmpty()) },
                 ifRight = {
@@ -98,5 +96,7 @@ class EventViewModel @Inject constructor(
             _viewEvent.postValue(ViewEvent(share))
         }
         tracker.share(event.id.toString())
+
+
     }
 }

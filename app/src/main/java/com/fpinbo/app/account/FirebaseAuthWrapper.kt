@@ -2,12 +2,11 @@ package com.fpinbo.app.account
 
 import android.app.Application
 import android.content.Intent
-import arrow.core.left
-import arrow.core.right
-import arrow.fx.IO
+import arrow.core.Either
 import com.firebase.ui.auth.AuthUI
 import com.fpinbo.app.R
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class FirebaseAuthWrapper @Inject constructor(
@@ -20,17 +19,8 @@ class FirebaseAuthWrapper @Inject constructor(
         User(it.displayName, it.email, it.photoUrl.toString())
     }
 
-    override fun logout(): IO<Unit> = IO.async { callback ->
-
-        authUI.signOut(application).addOnCompleteListener { task ->
-
-            if (task.isSuccessful) {
-                callback(Unit.right())
-            } else {
-                callback(task.exception!!.left())
-            }
-        }
-    }
+    override suspend fun logout(): Either<Throwable, Unit> =
+        Either.catch { authUI.signOut(application).await() }
 
     override fun signInIntent(): Intent = authUI
         .createSignInIntentBuilder()

@@ -1,10 +1,10 @@
 package com.fpinbo.app.network
 
-import arrow.fx.IO
+import arrow.core.Either
 import retrofit2.http.GET
 
 interface Api {
 
     @GET("events/all.json")
-    fun events(): IO<List<NetworkEvent>>
+    suspend fun events(): Either<Throwable,List<NetworkEvent>>
 }

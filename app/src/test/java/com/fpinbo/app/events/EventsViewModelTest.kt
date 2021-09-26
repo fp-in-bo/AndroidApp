@@ -1,31 +1,36 @@
 package com.fpinbo.app.events
 
+import CoroutineRule
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import arrow.fx.IO
-import arrow.fx.typeclasses.milliseconds
+import arrow.core.left
+import arrow.core.right
 import com.fpinbo.app.analytics.Tracker
 import com.fpinbo.app.entities.Event
 import com.fpinbo.app.network.Api
 import com.fpinbo.app.network.NetworkEvent
 import com.jraska.livedata.test
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import io.mockk.coEvery
+import io.mockk.mockk
+import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Rule
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class EventsViewModelTest {
 
     @get:Rule
-    val rule = InstantTaskExecutorRule()
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private val tracker: Tracker = mock()
+    @get:Rule
+    val coroutineRule = CoroutineRule()
+
+    private val tracker: Tracker = mockk(relaxed = true)
 
     @Test
     fun loadDataSuccess() {
-        val api: Api = mock {
-            on { events() } doReturn IO.sleep(10.milliseconds).flatMap {
-                IO.just(
+        val api: Api = mockk {
+            coEvery { events() } returns
                     listOf(
                         NetworkEvent(
                             id = 1,
@@ -34,17 +39,14 @@ class EventsViewModelTest {
                             imageUrl = "imageUrl",
                             description = "description"
                         )
-                    )
-                )
-            }
+                    ).right()
+
         }
 
         val sut = buildSut(api)
 
         sut.state.test()
-            .awaitNextValue()
-            .assertValueHistory(
-                Loading,
+            .assertValue(
                 Events(
                     listOf(
                         Event(
@@ -63,26 +65,22 @@ class EventsViewModelTest {
 
     @Test
     fun loadDataError() {
-        val api: Api = mock {
-            on { events() } doReturn IO.sleep(10.milliseconds).flatMap {
-                IO.raiseError<List<NetworkEvent>>(RuntimeException("error message"))
-            }
+        val api: Api = mockk {
+            coEvery { events() } returns RuntimeException("error message").left()
         }
 
         val sut = buildSut(api)
 
         sut.state.test()
-            .awaitNextValue()
-            .assertValueHistory(
-                Loading,
+            .assertValue(
                 Error("error message")
             )
     }
 
     @Test
     fun trackSelectItem() {
-        val api: Api = mock {
-            on { events() } doReturn IO.just(emptyList())
+        val api: Api = mockk {
+            coEvery { events() } returns emptyList<NetworkEvent>().right()
         }
         val sut = buildSut(api)
         sut.trackSelectItem(
@@ -97,7 +95,7 @@ class EventsViewModelTest {
             )
         )
 
-        verify(tracker).selectItem("1", "title")
+        verify { tracker.selectItem("1", "title") }
     }
 
     private fun buildSut(api: Api): EventsViewModel = EventsViewModel(api, tracker)
