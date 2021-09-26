@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import arrow.fx.IO
-import arrow.integrations.kotlinx.unsafeRunScoped
+import arrow.core.Either
 import com.fpinbo.app.analytics.Tracker
 import com.fpinbo.app.entities.Event
 import com.fpinbo.app.network.Api
 import com.fpinbo.app.network.toEntity
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class EventsViewModel @Inject constructor(
@@ -28,18 +28,15 @@ class EventsViewModel @Inject constructor(
 
     private fun loadData() {
         _state.value = Loading
-
-        retrieveData()
-            .unsafeRunScoped(viewModelScope) { result ->
-                val viewState = result.fold(
-                    ifLeft = { Error(it.message.orEmpty()) },
-                    ifRight = { Events(it.events) }
-                )
-                _state.postValue(viewState)
-            }
+        viewModelScope.launch {
+            _state.postValue(retrieveData().fold(
+                ifLeft = { Error(it.message.orEmpty()) },
+                ifRight = { Events(it.events) }
+            ))
+        }
     }
 
-    private fun retrieveData(): IO<Events> = api.events()
+    private suspend fun retrieveData(): Either<Throwable, Events> = api.events()
         .map { listOfNetworkEvent ->
             listOfNetworkEvent.map {
                 it.toEntity()

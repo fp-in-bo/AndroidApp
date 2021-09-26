@@ -4,8 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import arrow.fx.IO
-import arrow.fx.typeclasses.milliseconds
+import arrow.core.left
+import arrow.core.right
 import com.fpinbo.app.analytics.Tracker
 import com.fpinbo.app.entities.Event
 import com.fpinbo.app.event.dynamiclink.DynamicLinkBuilder
@@ -13,9 +13,10 @@ import com.fpinbo.app.event.view.EventFragmentArgs
 import com.fpinbo.app.network.Api
 import com.fpinbo.app.network.NetworkEvent
 import com.jraska.livedata.test
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,13 +28,13 @@ class EventViewModelTest {
     @get:Rule
     val rule = InstantTaskExecutorRule()
 
-    private val tracker: Tracker = mock()
+    private val tracker: Tracker = mockk(relaxed = true)
 
     @Test
     fun eventInExtras() {
 
-        val intent: Intent = mock {
-            on { data } doReturn mock()
+        val intent: Intent = mockk {
+            every { data } returns mockk()
         }
 
         val event = Event(
@@ -51,7 +52,7 @@ class EventViewModelTest {
             )
         })
 
-        val sut = buildSut(intent, args, mock(), mock())
+        val sut = buildSut(intent, args, mockk(), mockk())
 
         sut.state.test()
             .awaitValue()
@@ -61,13 +62,12 @@ class EventViewModelTest {
     @Test
     fun deeplinkSuccess() {
 
-        val intent: Intent = mock {
-            on { data } doReturn Uri.parse("https://fpinbo.dev/1.html")
+        val intent: Intent = mockk {
+            every { data } returns Uri.parse("https://fpinbo.dev/1.html")
         }
         val args = EventFragmentArgs.fromBundle(Bundle.EMPTY)
-        val api: Api = mock {
-            on { events() } doReturn IO.sleep(10.milliseconds).flatMap {
-                IO.just(
+        val api: Api = mockk {
+            coEvery { events() } returns
                     listOf(
                         NetworkEvent(
                             1,
@@ -77,13 +77,12 @@ class EventViewModelTest {
                             "description",
                             "videoUrl"
                         )
-                    )
-                )
-            }
+                    ).right()
+
         }
 
 
-        val sut = buildSut(intent, args, api, mock())
+        val sut = buildSut(intent, args, api, mockk())
 
         sut.state.test()
             .awaitValue()
@@ -105,18 +104,18 @@ class EventViewModelTest {
     @Test
     fun deeplinkError() {
 
-        val intent: Intent = mock {
-            on { data } doReturn Uri.parse("https://fpinbo.dev/1.html")
+        val intent: Intent = mockk {
+            every { data } returns Uri.parse("https://fpinbo.dev/1.html")
         }
         val args = EventFragmentArgs.fromBundle(Bundle.EMPTY)
-        val api: Api = mock {
-            on { events() } doReturn IO.sleep(10.milliseconds).flatMap {
-                IO.raiseError<List<NetworkEvent>>(RuntimeException("Network Error"))
-            }
+        val api: Api = mockk {
+            coEvery { events() } returns
+                    RuntimeException("Network Error").left()
+
         }
 
 
-        val sut = buildSut(intent, args, api, mock())
+        val sut = buildSut(intent, args, api, mockk())
 
         sut.state.test()
             .awaitValue()
@@ -127,13 +126,13 @@ class EventViewModelTest {
 
     @Test
     fun invalidInput() {
-        val intent: Intent = mock {
-            on { data } doReturn null
+        val intent: Intent = mockk {
+            every { data } returns null
         }
 
         val args = EventFragmentArgs.fromBundle(Bundle.EMPTY)
 
-        val sut = buildSut(intent, args, mock(), mock())
+        val sut = buildSut(intent, args, mockk(), mockk())
 
         sut.state.test()
             .awaitValue()
@@ -152,11 +151,11 @@ class EventViewModelTest {
             "shareUrl"
         )
 
-        val dynamicLinkBuilder = mock<DynamicLinkBuilder> {
-            on { build(event) } doReturn IO.just("link")
+        val dynamicLinkBuilder = mockk<DynamicLinkBuilder> {
+            coEvery { build(event) } returns "link".right()
         }
 
-        val sut = buildSut(mock(), mock(), mock(), dynamicLinkBuilder)
+        val sut = buildSut(mockk(), mockk(), mockk(), dynamicLinkBuilder)
 
         sut.onShare(event)
 
@@ -182,11 +181,11 @@ class EventViewModelTest {
             "shareUrl"
         )
 
-        val dynamicLinkBuilder = mock<DynamicLinkBuilder> {
-            on { build(event) } doReturn IO.raiseError(RuntimeException("Error Message"))
+        val dynamicLinkBuilder = mockk<DynamicLinkBuilder> {
+            coEvery { build(event) } returns RuntimeException("Error Message").left()
         }
 
-        val sut = buildSut(mock(), mock(), mock(), dynamicLinkBuilder)
+        val sut = buildSut(mockk(), mockk(), mockk(), dynamicLinkBuilder)
 
         sut.onShare(event)
 
@@ -210,15 +209,15 @@ class EventViewModelTest {
             "shareUrl"
         )
 
-        val dynamicLinkBuilder = mock<DynamicLinkBuilder> {
-            on { build(event) } doReturn IO.just("link")
+        val dynamicLinkBuilder = mockk<DynamicLinkBuilder> {
+            coEvery { build(event) } returns "link".right()
         }
 
-        val sut = buildSut(mock(), mock(), mock(), dynamicLinkBuilder)
+        val sut = buildSut(mockk(), mockk(), mockk(), dynamicLinkBuilder)
 
         sut.onShare(event)
 
-        verify(tracker).share("1")
+        verify { tracker.share("1") }
     }
 
     private fun buildSut(

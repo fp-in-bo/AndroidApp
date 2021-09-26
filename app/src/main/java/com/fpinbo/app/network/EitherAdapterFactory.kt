@@ -1,15 +1,15 @@
 package com.fpinbo.app.network
 
-import arrow.fx.IO
+import arrow.core.Either
 import retrofit2.CallAdapter
 import retrofit2.Retrofit
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
-class IOAdapterFactory : CallAdapter.Factory() {
+class EitherAdapterFactory : CallAdapter.Factory() {
 
     companion object {
-        fun create(): IOAdapterFactory = IOAdapterFactory()
+        fun create(): EitherAdapterFactory = EitherAdapterFactory()
     }
 
     override fun get(
@@ -17,16 +17,17 @@ class IOAdapterFactory : CallAdapter.Factory() {
         annotations: Array<Annotation>,
         retrofit: Retrofit
     ): CallAdapter<*, *>? {
-        val rawType = getRawType(returnType)
+        getRawType(returnType)
 
         if (returnType !is ParameterizedType) {
             throw IllegalArgumentException("Return type must be parameterized")
         }
 
-        val specifiedType = getParameterUpperBound(0, returnType)
+        val eitherType = getParameterUpperBound(0, returnType)
+        val specifiedType = getParameterUpperBound(1, eitherType as ParameterizedType)
 
-        return if (rawType == IO::class.java) {
-            IOCallAdapter<Type>(specifiedType)
+        return if (getRawType(eitherType) == Either::class.java) {
+            EitherCallAdapter<Type>(specifiedType)
         } else {
             null
         }

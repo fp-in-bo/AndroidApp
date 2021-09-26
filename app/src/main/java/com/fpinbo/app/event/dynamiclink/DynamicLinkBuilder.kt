@@ -1,12 +1,12 @@
 package com.fpinbo.app.event.dynamiclink
 
-import arrow.fx.IO
+import arrow.core.Either
 import com.fpinbo.app.entities.Event
 
 
 interface DynamicLinkBuilder {
 
-    fun build(event: Event): IO<String>
+    suspend fun build(event: Event): Either<Throwable, String>
 
 }
 

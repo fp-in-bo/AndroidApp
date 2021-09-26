@@ -29,7 +29,7 @@ class NetworkModule {
 
         val retrofit = Builder()
             .baseUrl(BASE_URL)
-            .addCallAdapterFactory(IOAdapterFactory.create())
+            .addCallAdapterFactory(EitherAdapterFactory.create())
             .addConverterFactory(json.asConverterFactory(contentType))
             .build()
 
