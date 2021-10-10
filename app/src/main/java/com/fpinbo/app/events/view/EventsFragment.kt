@@ -1,6 +1,5 @@
 package com.fpinbo.app.events.view
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +7,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.transition.TransitionManager
@@ -18,30 +15,15 @@ import com.fpinbo.app.events.Error
 import com.fpinbo.app.events.Events
 import com.fpinbo.app.events.EventsViewModel
 import com.fpinbo.app.events.Loading
-import com.fpinbo.app.events.inject.EventsModule
-import com.fpinbo.app.events.inject.EventsSubComponent
 import com.fpinbo.app.utils.exhaustive
 import com.fpinbo.app.utils.hide
-import com.fpinbo.app.utils.subComponentBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.events_fragment.*
-import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class EventsFragment : Fragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private val viewModel: EventsViewModel by viewModels { viewModelFactory }
-
-    override fun onAttach(context: Context) {
-        val eventsSubComponent =
-            context.subComponentBuilder<EventsSubComponent.Builder>()
-                .eventsModule(EventsModule())
-                .build()
-        eventsSubComponent.inject(this)
-        super.onAttach(context)
-    }
+    private val viewModel: EventsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +32,7 @@ class EventsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.state.observe(viewLifecycleOwner, Observer {
+        viewModel.state.observe(viewLifecycleOwner, {
 
             TransitionManager.beginDelayedTransition(root)
 

@@ -9,9 +9,11 @@ import com.fpinbo.app.analytics.Tracker
 import com.fpinbo.app.entities.Event
 import com.fpinbo.app.network.Api
 import com.fpinbo.app.network.toEntity
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class EventsViewModel @Inject constructor(
     private val api: Api,
     private val tracker: Tracker

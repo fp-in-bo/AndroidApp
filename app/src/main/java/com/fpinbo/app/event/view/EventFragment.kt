@@ -1,6 +1,5 @@
 package com.fpinbo.app.event.view
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -13,7 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import coil.load
@@ -22,33 +21,28 @@ import com.fpinbo.app.event.Data
 import com.fpinbo.app.event.Error
 import com.fpinbo.app.event.EventViewModel
 import com.fpinbo.app.event.ShareEvent
-import com.fpinbo.app.event.inject.EventModule
-import com.fpinbo.app.event.inject.EventSubComponent
 import com.fpinbo.app.utils.exhaustive
-import com.fpinbo.app.utils.subComponentBuilder
 import com.google.android.material.transition.MaterialContainerTransform
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.event_fragment.*
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class EventFragment : Fragment() {
 
     @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+    lateinit var viewModelFactory: EventViewModel.Factory
 
-    private val viewModel: EventViewModel by viewModels { viewModelFactory }
+    private val viewModel: EventViewModel by viewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return viewModelFactory.create(
+                    requireActivity().intent,
+                    navArgs<EventFragmentArgs>().value
+                ) as T
+            }
 
-    override fun onAttach(context: Context) {
-        val eventSubComponent =
-            context.subComponentBuilder<EventSubComponent.Builder>()
-                .eventModule(
-                    EventModule(
-                        requireActivity().intent,
-                        navArgs<EventFragmentArgs>().value
-                    )
-                )
-                .build()
-        eventSubComponent.inject(this)
-        super.onAttach(context)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,7 +65,7 @@ class EventFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.state.observe(viewLifecycleOwner, Observer {
+        viewModel.state.observe(viewLifecycleOwner, {
 
             exhaustive..when (it) {
                 is Data -> bindData(it)
@@ -79,7 +73,7 @@ class EventFragment : Fragment() {
             }
         })
 
-        viewModel.viewEvent.observe(viewLifecycleOwner, Observer { event ->
+        viewModel.viewEvent.observe(viewLifecycleOwner, { event ->
             event.consume {
                 exhaustive..when (it) {
                     is ShareEvent.Success -> {
