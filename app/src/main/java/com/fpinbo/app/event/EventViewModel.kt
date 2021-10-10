@@ -15,15 +15,17 @@ import com.fpinbo.app.event.view.EventFragmentArgs
 import com.fpinbo.app.network.Api
 import com.fpinbo.app.network.toEntity
 import com.fpinbo.app.utils.ViewEvent
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class EventViewModel @Inject constructor(
-    private val intent: Intent,
-    private val args: EventFragmentArgs,
+class EventViewModel @AssistedInject constructor(
+    @Assisted private val intent: Intent,
+    @Assisted private val args: EventFragmentArgs,
     private val api: Api,
     private val dynamicLinkBuilder: DynamicLinkBuilder,
-    private val tracker: Tracker
+    private val tracker: Tracker,
 ) : ViewModel() {
 
     private val _state = MutableLiveData<EventState>()
@@ -96,7 +98,13 @@ class EventViewModel @Inject constructor(
             _viewEvent.postValue(ViewEvent(share))
         }
         tracker.share(event.id.toString())
+    }
 
-
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            intent: Intent,
+            args: EventFragmentArgs
+        ): EventViewModel
     }
 }

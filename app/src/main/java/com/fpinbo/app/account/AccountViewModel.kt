@@ -9,9 +9,11 @@ import androidx.lifecycle.viewModelScope
 import com.firebase.ui.auth.IdpResponse
 import com.fpinbo.app.analytics.Tracker
 import com.fpinbo.app.utils.ViewEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class AccountViewModel @Inject constructor(
     private val authenticator: Authenticator,
     private val tracker: Tracker

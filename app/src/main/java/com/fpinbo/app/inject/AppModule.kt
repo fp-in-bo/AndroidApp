@@ -1,17 +1,16 @@
 package com.fpinbo.app.inject
 
-import android.app.Application
 import androidx.lifecycle.LifecycleObserver
 import com.fpinbo.app.utils.LifeCycleLogger
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
 
 @Module
-class AppModule(private val application: Application) {
-
-    @Provides
-    fun provideContext() = application
+@InstallIn(SingletonComponent::class)
+class AppModule {
 
     @Provides
     @IntoSet

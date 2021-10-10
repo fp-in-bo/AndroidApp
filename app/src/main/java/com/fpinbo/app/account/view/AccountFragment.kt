@@ -1,6 +1,5 @@
 package com.fpinbo.app.account.view
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,39 +8,23 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.transition.TransitionManager
 import com.fpinbo.app.R
 import com.fpinbo.app.account.*
-import com.fpinbo.app.account.inject.AccountModule
-import com.fpinbo.app.account.inject.AccountSubComponent
 import com.fpinbo.app.utils.exhaustive
 import com.fpinbo.app.utils.hide
-import com.fpinbo.app.utils.subComponentBuilder
 import com.google.android.material.transition.MaterialFadeThrough
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.account_fragment.*
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class AccountFragment : Fragment() {
 
     companion object {
         private const val RC_SIGN_IN = 2500
     }
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private val viewModel: AccountViewModel by viewModels { viewModelFactory }
-
-    override fun onAttach(context: Context) {
-        val accountSubComponent =
-            context.subComponentBuilder<AccountSubComponent.Builder>()
-                .accountModule(AccountModule())
-                .build()
-        accountSubComponent.inject(this)
-        super.onAttach(context)
-    }
+    private val viewModel: AccountViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -53,7 +36,7 @@ class AccountFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.state.observe(viewLifecycleOwner, Observer {
+        viewModel.state.observe(viewLifecycleOwner, {
 
             TransitionManager.beginDelayedTransition(root, MaterialFadeThrough())
 
@@ -65,7 +48,7 @@ class AccountFragment : Fragment() {
             }
         })
 
-        viewModel.viewEvent.observe(viewLifecycleOwner, Observer { event ->
+        viewModel.viewEvent.observe(viewLifecycleOwner, { event ->
             event.consume {
                 exhaustive..when (it) {
                     is PerformLogin -> performLogin(it.intent)
