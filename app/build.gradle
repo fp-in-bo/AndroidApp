@@ -83,7 +83,7 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation "androidx.transition:transition:1.4.1"
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4'
 
     def nav_version = "2.5.0"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
