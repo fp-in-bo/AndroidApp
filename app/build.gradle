@@ -123,7 +123,7 @@ dependencies {
 
 
     testImplementation "junit:junit:4.13.2"
-    testImplementation "io.mockk:mockk:1.12.4"
+    testImplementation "io.mockk:mockk:1.12.8"
     testImplementation 'com.jraska.livedata:testing-ktx:1.2.0'
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
     testImplementation 'org.robolectric:robolectric:4.8.1'
